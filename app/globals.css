@@ -9,8 +9,8 @@
 .match-node{background:none!important;border:0!important;box-shadow:none!important;clip-path:none!important;display:grid!important;grid-template-rows:1fr 14px 1fr!important;overflow:visible!important}
 .match-node:before{content:'';position:absolute;top:23%;height:54%;width:2px;background:#e6edf4;box-shadow:0 0 6px currentColor}
 .match-node.left:before{right:-2px;color:var(--pink)}.match-node.right:before{left:-2px;color:var(--cyan)}
-.match-node .entrant{min-height:0;display:grid;grid-template-columns:28px 1fr 25px;align-items:center;padding:4px 16px;background:transparent url('/dogtag-plate.png') center/100% 100% no-repeat!important;border:0!important;box-shadow:none!important;clip-path:none!important}
-.match-node .entrant b{font-size:12px!important;font-weight:900!important;letter-spacing:.45px!important;text-shadow:0 2px 3px #000,0 0 5px #000}.match-node .entrant span{font-size:8px!important;color:#dbe2e9!important;text-shadow:0 1px 2px #000}.match-node .entrant i{font-size:14px!important;color:#fff!important;text-shadow:0 1px 3px #000}
+.match-node .entrant{min-height:0;display:grid;grid-template-columns:19px 1fr;align-items:center;padding:3px 13px;background:transparent url('/dogtag-plate.png') center/100% 100% no-repeat!important;border:0!important;box-shadow:none!important;clip-path:none!important}
+.match-node .entrant b{font-size:10px!important;font-weight:900!important;letter-spacing:.2px!important;text-shadow:0 2px 3px #000,0 0 5px #000}.match-node .entrant span{font-size:7px!important;color:#dbe2e9!important;text-shadow:0 1px 2px #000}.match-node .entrant i{display:none!important}
 .match-node.left .entrant{border-left:3px solid var(--pink)}.match-node.right .entrant{border-right:3px solid var(--cyan)}
 .match-node .vs-line{height:14px;position:relative;background:none}
 .match-node .vs-line:after{content:'';position:absolute;height:2px;top:6px;width:10px;background:#e6edf4;box-shadow:0 0 5px currentColor}

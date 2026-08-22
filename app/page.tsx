@@ -3,7 +3,7 @@
 import { ChangeEvent, CSSProperties, useState } from 'react';
 
 const presets = [4, 8, 16, 32];
-const initialTeams = ['STELLAR PINK', 'NOVA RUSH', 'BLUE IGNITION', 'VOLT CREW', 'CYBER BLOOM', 'NEON EDGE', 'RAPID BEAT', 'ZERO LIMIT'];
+const initialTeams = ['STELLAR PINK', 'NOVA RUSH', 'BLUE IGNITION', 'VOLT CREW', 'LUNAR SPARK', 'BEAT BREAKERS', 'MAGENTA FORCE', 'KNOCK OUT', 'CYBER BLOOM', 'NEON EDGE', 'RAPID BEAT', 'ZERO LIMIT', 'AQUA DRIVE', 'SONIC WAVE', 'FROST BYTE', 'REV UNIT'];
 const BOARD_W = 1120;
 const BOARD_H = 560;
 
@@ -16,15 +16,15 @@ function makeLayout(teams: string[]) {
   const size = powerOfTwo(teams.length);
   const slots = Array.from({ length: size }, (_, i) => teams[i] || 'BYE');
   const sideRounds = Math.log2(size) - 1;
-  const cardW = size >= 32 ? 112 : size >= 16 ? 146 : size === 8 ? 180 : 204;
-  const cardH = size >= 32 ? 58 : size >= 16 ? 78 : size === 8 ? 112 : 130;
-  const outerX = size >= 16 ? 12 : 18;
+  const cardW = size >= 32 ? 104 : size === 16 ? 135 : size === 8 ? 180 : 204;
+  const cardH = size >= 32 ? 58 : size === 16 ? 94 : size === 8 ? 112 : 130;
+  const outerX = size === 16 ? 100 : size >= 32 ? 18 : 42;
   const finalW = 220;
   const finalX = (BOARD_W - finalW) / 2;
   const leftLimit = finalX - 30;
   const available = leftLimit - outerX - cardW;
-  const step = sideRounds > 1 ? available / (sideRounds - 1) : available;
-  const contentOffset = size <= 8 ? 80 : size === 16 ? 35 : 10;
+  const step = size === 16 ? 150 : sideRounds > 1 ? available / (sideRounds - 1) : available;
+  const contentOffset = size <= 8 ? 80 : size === 16 ? 85 : 10;
   const contentHeight = BOARD_H - contentOffset;
   const nodes: Node[] = [];
   const lines: Line[] = [];
@@ -68,12 +68,10 @@ function makeLayout(teams: string[]) {
   const leftSemi = nodes.find(n => n.side === 'left' && n.round === sideRounds - 1)!;
   const rightSemi = nodes.find(n => n.side === 'right' && n.round === sideRounds - 1)!;
   const leftY = leftSemi.y + leftSemi.h / 2;
-  const rightY = rightSemi.y + rightSemi.h / 2;
-  const winnerY = 0; const winnerH = 104; const winnerLineY = winnerY + winnerH / 2;
-  const leftJoint = (leftSemi.x + leftSemi.w + finalX) / 2;
-  const rightJoint = (rightSemi.x + finalX + finalW) / 2;
-  lines.push({ x: leftSemi.x + leftSemi.w, y: leftY, w: leftJoint - (leftSemi.x + leftSemi.w), h: 2, side: 'left' }, { x: leftJoint, y: winnerLineY, w: 2, h: leftY - winnerLineY, vertical: true, side: 'left' }, { x: leftJoint, y: winnerLineY, w: finalX - leftJoint, h: 2, side: 'left' });
-  lines.push({ x: rightJoint, y: rightY, w: rightSemi.x - rightJoint, h: 2, side: 'right' }, { x: rightJoint, y: winnerLineY, w: 2, h: rightY - winnerLineY, vertical: true, side: 'right' }, { x: finalX + finalW, y: winnerLineY, w: rightJoint - (finalX + finalW), h: 2, side: 'right' });
+  const winnerY = 0; const winnerH = 104;
+  const centerX = BOARD_W / 2;
+  lines.push({ x: leftSemi.x + leftSemi.w, y: leftY, w: centerX - (leftSemi.x + leftSemi.w), h: 3, side: 'left' });
+  lines.push({ x: centerX, y: leftY, w: rightSemi.x - centerX, h: 3, side: 'right' });
   return { size, nodes, lines, final: { x: finalX, y: winnerY, w: finalW, h: winnerH }, sideRounds };
 }
 
