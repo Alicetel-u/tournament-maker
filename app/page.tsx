@@ -24,6 +24,8 @@ function makeLayout(teams: string[]) {
   const leftLimit = finalX - 30;
   const available = leftLimit - outerX - cardW;
   const step = sideRounds > 1 ? available / (sideRounds - 1) : available;
+  const contentOffset = size <= 8 ? 80 : size === 16 ? 35 : 10;
+  const contentHeight = BOARD_H - contentOffset;
   const nodes: Node[] = [];
   const lines: Line[] = [];
 
@@ -34,7 +36,7 @@ function makeLayout(teams: string[]) {
       const leftX = outerX + step * round;
       const x = side === 'left' ? leftX : BOARD_W - leftX - cardW;
       for (let index = 0; index < count; index++) {
-        const centerY = (index + .5) * BOARD_H / count;
+        const centerY = contentOffset + (index + .5) * contentHeight / count;
         const top = round === 0 ? sideSlots[index * 2] : `WINNER ${index * 2 + 1}`;
         const bottom = round === 0 ? sideSlots[index * 2 + 1] : `WINNER ${index * 2 + 2}`;
         nodes.push({ side, round, index, x, y: centerY - cardH / 2, w: cardW, h: cardH, top, bottom });
@@ -65,10 +67,13 @@ function makeLayout(teams: string[]) {
 
   const leftSemi = nodes.find(n => n.side === 'left' && n.round === sideRounds - 1)!;
   const rightSemi = nodes.find(n => n.side === 'right' && n.round === sideRounds - 1)!;
-  const finalY = BOARD_H / 2;
-  lines.push({ x: leftSemi.x + leftSemi.w, y: finalY, w: finalX - (leftSemi.x + leftSemi.w), h: 2, side: 'left' });
-  lines.push({ x: finalX + finalW, y: finalY, w: rightSemi.x - (finalX + finalW), h: 2, side: 'right' });
-  return { size, nodes, lines, final: { x: finalX, y: finalY - 46, w: finalW, h: 92 }, sideRounds };
+  const leftY = leftSemi.y + leftSemi.h / 2;
+  const rightY = rightSemi.y + rightSemi.h / 2;
+  const winnerY = 12; const winnerH = 82; const winnerLineY = winnerY + winnerH / 2;
+  const leftJoint = finalX - 26; const rightJoint = finalX + finalW + 26;
+  lines.push({ x: leftSemi.x + leftSemi.w, y: leftY, w: leftJoint - (leftSemi.x + leftSemi.w), h: 2, side: 'left' }, { x: leftJoint, y: winnerLineY, w: 2, h: leftY - winnerLineY, vertical: true, side: 'left' }, { x: leftJoint, y: winnerLineY, w: finalX - leftJoint, h: 2, side: 'left' });
+  lines.push({ x: rightJoint, y: rightY, w: rightSemi.x - rightJoint, h: 2, side: 'right' }, { x: rightJoint, y: winnerLineY, w: 2, h: rightY - winnerLineY, vertical: true, side: 'right' }, { x: finalX + finalW, y: winnerLineY, w: rightJoint - (finalX + finalW), h: 2, side: 'right' });
+  return { size, nodes, lines, final: { x: finalX, y: winnerY, w: finalW, h: winnerH }, sideRounds };
 }
 
 function Match({ node }: { node: Node }) {
@@ -110,8 +115,7 @@ export default function Home() {
             <div className="board-inner">
               {layout.lines.map((line, i) => <span key={i} className={`connector ${line.side} ${line.vertical ? 'vertical' : ''}`} style={{ left: line.x, top: line.y, width: line.w, height: line.h }}/>) }
               {layout.nodes.map((node, i) => <Match key={i} node={node}/>) }
-              <div className="final-label" style={{ left: layout.final.x, top: layout.final.y + 5, width: layout.final.w }}>GRAND FINAL</div>
-              <div className="champion" style={{ left: layout.final.x, top: layout.final.y + 18, width: layout.final.w }}><small>THE</small><b>WINNER</b><em>TAKES THE CROWN</em></div>
+              <div className="champion" style={{ left: layout.final.x, top: layout.final.y, width: layout.final.w, height: layout.final.h }}><b>WINNER</b></div>
             </div>
           </div>
           <footer><span>PINK DIVISION</span><b>WINNERS ADVANCE ALONG THE CONNECTED PATH</b><span>CYAN DIVISION</span></footer>
