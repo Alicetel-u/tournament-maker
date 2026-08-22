@@ -67,12 +67,20 @@ function makeLayout(teams: string[]) {
 
   const leftSemi = nodes.find(n => n.side === 'left' && n.round === sideRounds - 1)!;
   const rightSemi = nodes.find(n => n.side === 'right' && n.round === sideRounds - 1)!;
-  const leftY = leftSemi.y + leftSemi.h / 2;
   const winnerY = 0; const winnerH = 104;
   const centerX = BOARD_W / 2;
-  lines.push({ x: leftSemi.x + leftSemi.w, y: leftY, w: centerX - (leftSemi.x + leftSemi.w), h: 3, side: 'left' });
-  lines.push({ x: centerX, y: leftY, w: rightSemi.x - centerX, h: 3, side: 'right' });
-  return { size, nodes, lines, final: { x: finalX, y: winnerY, w: finalW, h: winnerH }, sideRounds };
+  const finalMatch = { x: finalX, y: 130, w: finalW, h: 108 };
+  const leftStartX = leftSemi.x + leftSemi.w / 2;
+  const rightStartX = rightSemi.x + rightSemi.w / 2;
+  const semiTopY = leftSemi.y;
+  const finalTopY = finalMatch.y + finalMatch.h * .25;
+  const finalBottomY = finalMatch.y + finalMatch.h * .75;
+  lines.push({ x: finalMatch.x, y: finalTopY, w: leftStartX - finalMatch.x, h: 3, side: 'left' });
+  lines.push({ x: leftStartX, y: finalTopY, w: 3, h: semiTopY - finalTopY, vertical: true, side: 'left' });
+  lines.push({ x: finalMatch.x + finalMatch.w, y: finalBottomY, w: rightStartX - finalMatch.x - finalMatch.w, h: 3, side: 'right' });
+  lines.push({ x: rightStartX, y: finalBottomY, w: 3, h: semiTopY - finalBottomY, vertical: true, side: 'right' });
+  lines.push({ x: centerX, y: winnerH - 2, w: 3, h: finalMatch.y - winnerH + 2, vertical: true, side: 'left' });
+  return { size, nodes, lines, final: { x: finalX, y: winnerY, w: finalW, h: winnerH }, finalMatch, sideRounds };
 }
 
 function Match({ node }: { node: Node }) {
@@ -114,6 +122,9 @@ export default function Home() {
             <div className="board-inner">
               {layout.lines.map((line, i) => <span key={i} className={`connector ${line.side} ${line.vertical ? 'vertical' : ''}`} style={{ left: line.x, top: line.y, width: line.w, height: line.h }}/>) }
               {layout.nodes.map((node, i) => <Match key={i} node={node}/>) }
+              <div className="match-node final-match" style={{ left: layout.finalMatch.x, top: layout.finalMatch.y, width: layout.finalMatch.w, height: layout.finalMatch.h }}>
+                <div className="entrant top"><span>L</span><b>WINNER LEFT</b></div><div className="vs-line"><em>VS</em></div><div className="entrant bottom"><span>R</span><b>WINNER RIGHT</b></div>
+              </div>
               <div className="champion" style={{ left: layout.final.x, top: layout.final.y, width: layout.final.w, height: layout.final.h }}><img src="/winner-brush-gold.png" alt="WINNER" /></div>
             </div>
           </div>
