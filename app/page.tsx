@@ -4,8 +4,8 @@ import { ChangeEvent, CSSProperties, useState } from 'react';
 
 const presets = [4, 8, 16, 32];
 const initialTeams = ['STELLAR PINK', 'NOVA RUSH', 'BLUE IGNITION', 'VOLT CREW', 'CYBER BLOOM', 'NEON EDGE', 'RAPID BEAT', 'ZERO LIMIT'];
-const BOARD_W = 1080;
-const BOARD_H = 500;
+const BOARD_W = 1120;
+const BOARD_H = 560;
 
 type Node = { side: 'left' | 'right'; round: number; index: number; x: number; y: number; w: number; h: number; top: string; bottom: string };
 type Line = { x: number; y: number; w: number; h: number; vertical?: boolean; side: 'left' | 'right' };
@@ -16,10 +16,10 @@ function makeLayout(teams: string[]) {
   const size = powerOfTwo(teams.length);
   const slots = Array.from({ length: size }, (_, i) => teams[i] || 'BYE');
   const sideRounds = Math.log2(size) - 1;
-  const cardW = size >= 32 ? 104 : size >= 16 ? 122 : 146;
-  const cardH = size >= 32 ? 46 : size >= 16 ? 56 : 70;
-  const outerX = size >= 16 ? 18 : 34;
-  const finalW = 164;
+  const cardW = size >= 32 ? 122 : size >= 16 ? 158 : size === 8 ? 196 : 220;
+  const cardH = size >= 32 ? 56 : size >= 16 ? 74 : size === 8 ? 104 : 124;
+  const outerX = size >= 16 ? 12 : 18;
+  const finalW = 196;
   const finalX = (BOARD_W - finalW) / 2;
   const leftLimit = finalX - 30;
   const available = leftLimit - outerX - cardW;
@@ -111,7 +111,7 @@ export default function Home() {
               {layout.lines.map((line, i) => <span key={i} className={`connector ${line.side} ${line.vertical ? 'vertical' : ''}`} style={{ left: line.x, top: line.y, width: line.w, height: line.h }}/>) }
               {layout.nodes.map((node, i) => <Match key={i} node={node}/>) }
               <div className="final-label" style={{ left: layout.final.x, top: layout.final.y + 5, width: layout.final.w }}>GRAND FINAL</div>
-              <div className="champion" style={{ left: layout.final.x, top: layout.final.y + 25, width: layout.final.w }}><small>TOURNAMENT</small><b>優 勝</b><em>CHAMPION</em></div>
+              <div className="champion" style={{ left: layout.final.x, top: layout.final.y + 18, width: layout.final.w }}><small>THE</small><b>WINNER</b><em>TAKES THE CROWN</em></div>
             </div>
           </div>
           <footer><span>PINK DIVISION</span><b>WINNERS ADVANCE ALONG THE CONNECTED PATH</b><span>CYAN DIVISION</span></footer>
