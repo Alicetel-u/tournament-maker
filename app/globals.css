@@ -2,7 +2,7 @@
 
 /* Classic bracket: every entrant is an individual box and every pair visibly converges. */
 @font-face{font-family:'Road Rage';src:url('/RoadRage-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
-.sheet{padding:14px 18px 9px!important}.sheet-title{height:78px!important}.sheet-title h1{font-size:clamp(28px,3.4vw,46px)!important;margin:2px 0 3px!important}.board-inner{width:1120px!important;height:560px!important;transform:translate(-50%,-50%) scale(.80)!important}.sheet footer{height:18px!important}
+.sheet{padding:14px 18px 9px!important}.sheet-title{height:78px!important}.sheet-title h1{font-size:clamp(28px,3.4vw,46px)!important;margin:2px 0 3px!important}.board-inner{width:1120px!important;height:560px!important;transform:translate(-50%,-50%) scale(.90)!important}
 @media(max-width:900px){.board-inner{transform:translate(-50%,-50%) scale(.72)!important}}
 @media print{.board-inner{transform:translate(-50%,-50%) scale(.94)!important}}
 .bracket-board{background:radial-gradient(ellipse at center,#02060b9c,#02060b42 48%,transparent 76%)!important}

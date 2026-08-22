@@ -16,15 +16,15 @@ function makeLayout(teams: string[]) {
   const size = powerOfTwo(teams.length);
   const slots = Array.from({ length: size }, (_, i) => teams[i] || 'BYE');
   const sideRounds = Math.log2(size) - 1;
-  const cardW = size >= 32 ? 104 : size === 16 ? 135 : size === 8 ? 180 : 204;
-  const cardH = size >= 32 ? 58 : size === 16 ? 94 : size === 8 ? 112 : 130;
-  const outerX = size === 16 ? 100 : size >= 32 ? 18 : 42;
+  const cardW = size >= 32 ? 104 : size === 16 ? 150 : size === 8 ? 180 : 204;
+  const cardH = size >= 32 ? 58 : size === 16 ? 108 : size === 8 ? 112 : 130;
+  const outerX = size === 16 ? 70 : size >= 32 ? 18 : 42;
   const finalW = 220;
   const finalX = (BOARD_W - finalW) / 2;
   const leftLimit = finalX - 30;
   const available = leftLimit - outerX - cardW;
-  const step = size === 16 ? 150 : sideRounds > 1 ? available / (sideRounds - 1) : available;
-  const contentOffset = size <= 8 ? 80 : size === 16 ? 85 : 10;
+  const step = size === 16 ? 160 : sideRounds > 1 ? available / (sideRounds - 1) : available;
+  const contentOffset = size <= 8 ? 80 : size === 16 ? 50 : 10;
   const contentHeight = BOARD_H - contentOffset;
   const nodes: Node[] = [];
   const lines: Line[] = [];
@@ -117,7 +117,6 @@ export default function Home() {
               <div className="champion" style={{ left: layout.final.x, top: layout.final.y, width: layout.final.w, height: layout.final.h }}><img src="/winner-brush-gold.png" alt="WINNER" /></div>
             </div>
           </div>
-          <footer><span>PINK DIVISION</span><b>WINNERS ADVANCE ALONG THE CONNECTED PATH</b><span>CYAN DIVISION</span></footer>
         </article>
       </div>
     </section>
