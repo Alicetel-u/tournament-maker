@@ -16,10 +16,10 @@ function makeLayout(teams: string[]) {
   const size = powerOfTwo(teams.length);
   const slots = Array.from({ length: size }, (_, i) => teams[i] || 'BYE');
   const sideRounds = Math.log2(size) - 1;
-  const cardW = size >= 32 ? 122 : size >= 16 ? 158 : size === 8 ? 196 : 220;
-  const cardH = size >= 32 ? 60 : size >= 16 ? 82 : size === 8 ? 126 : 142;
+  const cardW = size >= 32 ? 112 : size >= 16 ? 146 : size === 8 ? 180 : 204;
+  const cardH = size >= 32 ? 58 : size >= 16 ? 78 : size === 8 ? 112 : 130;
   const outerX = size >= 16 ? 12 : 18;
-  const finalW = 260;
+  const finalW = 220;
   const finalX = (BOARD_W - finalW) / 2;
   const leftLimit = finalX - 30;
   const available = leftLimit - outerX - cardW;
@@ -70,7 +70,8 @@ function makeLayout(teams: string[]) {
   const leftY = leftSemi.y + leftSemi.h / 2;
   const rightY = rightSemi.y + rightSemi.h / 2;
   const winnerY = 0; const winnerH = 104; const winnerLineY = winnerY + winnerH / 2;
-  const leftJoint = finalX - 26; const rightJoint = finalX + finalW + 26;
+  const leftJoint = (leftSemi.x + leftSemi.w + finalX) / 2;
+  const rightJoint = (rightSemi.x + finalX + finalW) / 2;
   lines.push({ x: leftSemi.x + leftSemi.w, y: leftY, w: leftJoint - (leftSemi.x + leftSemi.w), h: 2, side: 'left' }, { x: leftJoint, y: winnerLineY, w: 2, h: leftY - winnerLineY, vertical: true, side: 'left' }, { x: leftJoint, y: winnerLineY, w: finalX - leftJoint, h: 2, side: 'left' });
   lines.push({ x: rightJoint, y: rightY, w: rightSemi.x - rightJoint, h: 2, side: 'right' }, { x: rightJoint, y: winnerLineY, w: 2, h: rightY - winnerLineY, vertical: true, side: 'right' }, { x: finalX + finalW, y: winnerLineY, w: rightJoint - (finalX + finalW), h: 2, side: 'right' });
   return { size, nodes, lines, final: { x: finalX, y: winnerY, w: finalW, h: winnerH }, sideRounds };
