@@ -17,9 +17,9 @@ function makeLayout(teams: string[]) {
   const slots = Array.from({ length: size }, (_, i) => teams[i] || 'BYE');
   const sideRounds = Math.log2(size) - 1;
   const cardW = size >= 32 ? 122 : size >= 16 ? 158 : size === 8 ? 196 : 220;
-  const cardH = size >= 32 ? 56 : size >= 16 ? 74 : size === 8 ? 104 : 124;
+  const cardH = size >= 32 ? 60 : size >= 16 ? 82 : size === 8 ? 126 : 142;
   const outerX = size >= 16 ? 12 : 18;
-  const finalW = 196;
+  const finalW = 260;
   const finalX = (BOARD_W - finalW) / 2;
   const leftLimit = finalX - 30;
   const available = leftLimit - outerX - cardW;
@@ -69,7 +69,7 @@ function makeLayout(teams: string[]) {
   const rightSemi = nodes.find(n => n.side === 'right' && n.round === sideRounds - 1)!;
   const leftY = leftSemi.y + leftSemi.h / 2;
   const rightY = rightSemi.y + rightSemi.h / 2;
-  const winnerY = 12; const winnerH = 82; const winnerLineY = winnerY + winnerH / 2;
+  const winnerY = 0; const winnerH = 104; const winnerLineY = winnerY + winnerH / 2;
   const leftJoint = finalX - 26; const rightJoint = finalX + finalW + 26;
   lines.push({ x: leftSemi.x + leftSemi.w, y: leftY, w: leftJoint - (leftSemi.x + leftSemi.w), h: 2, side: 'left' }, { x: leftJoint, y: winnerLineY, w: 2, h: leftY - winnerLineY, vertical: true, side: 'left' }, { x: leftJoint, y: winnerLineY, w: finalX - leftJoint, h: 2, side: 'left' });
   lines.push({ x: rightJoint, y: rightY, w: rightSemi.x - rightJoint, h: 2, side: 'right' }, { x: rightJoint, y: winnerLineY, w: 2, h: rightY - winnerLineY, vertical: true, side: 'right' }, { x: finalX + finalW, y: winnerLineY, w: rightJoint - (finalX + finalW), h: 2, side: 'right' });
@@ -115,7 +115,7 @@ export default function Home() {
             <div className="board-inner">
               {layout.lines.map((line, i) => <span key={i} className={`connector ${line.side} ${line.vertical ? 'vertical' : ''}`} style={{ left: line.x, top: line.y, width: line.w, height: line.h }}/>) }
               {layout.nodes.map((node, i) => <Match key={i} node={node}/>) }
-              <div className="champion" style={{ left: layout.final.x, top: layout.final.y, width: layout.final.w, height: layout.final.h }}><b>WINNER</b></div>
+              <div className="champion" style={{ left: layout.final.x, top: layout.final.y, width: layout.final.w, height: layout.final.h }}><img src="/winner-brush-gold.png" alt="WINNER" /></div>
             </div>
           </div>
           <footer><span>PINK DIVISION</span><b>WINNERS ADVANCE ALONG THE CONNECTED PATH</b><span>CYAN DIVISION</span></footer>
