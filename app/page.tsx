@@ -48,14 +48,17 @@ function makeLayout(teams: string[]) {
       const parents = nodes.filter(n => n.side === side && n.round === round + 1);
       parents.forEach((parent, i) => {
         const a = children[i * 2]; const b = children[i * 2 + 1];
-        const aY = a.y + a.h / 2; const bY = b.y + b.h / 2; const parentY = parent.y + parent.h / 2;
-        if (side === 'left') {
-          const joint = (a.x + a.w + parent.x) / 2;
-          lines.push({ x: a.x + a.w, y: aY, w: joint - (a.x + a.w), h: 2, side }, { x: b.x + b.w, y: bY, w: joint - (b.x + b.w), h: 2, side }, { x: joint, y: aY, w: 2, h: bY - aY, vertical: true, side }, { x: joint, y: parentY, w: parent.x - joint, h: 2, side });
-        } else {
-          const joint = (a.x + (parent.x + parent.w)) / 2;
-          lines.push({ x: joint, y: aY, w: a.x - joint, h: 2, side }, { x: joint, y: bY, w: b.x - joint, h: 2, side }, { x: joint, y: aY, w: 2, h: bY - aY, vertical: true, side }, { x: parent.x + parent.w, y: parentY, w: joint - (parent.x + parent.w), h: 2, side });
-        }
+        [a, b].forEach((child, childIndex) => {
+          const startY = child.y + child.h / 2;
+          const targetY = parent.y + parent.h * (childIndex === 0 ? .23 : .77);
+          if (side === 'left') {
+            const startX = child.x + child.w; const joint = (startX + parent.x) / 2;
+            lines.push({ x: startX, y: startY, w: joint - startX, h: 2, side }, { x: joint, y: Math.min(startY, targetY), w: 2, h: Math.abs(targetY - startY) + 2, vertical: true, side }, { x: joint, y: targetY, w: parent.x - joint, h: 2, side });
+          } else {
+            const startX = child.x; const targetX = parent.x + parent.w; const joint = (startX + targetX) / 2;
+            lines.push({ x: joint, y: startY, w: startX - joint, h: 2, side }, { x: joint, y: Math.min(startY, targetY), w: 2, h: Math.abs(targetY - startY) + 2, vertical: true, side }, { x: targetX, y: targetY, w: joint - targetX, h: 2, side });
+          }
+        });
       });
     }
   });
@@ -107,11 +110,8 @@ export default function Home() {
             <div className="board-inner">
               {layout.lines.map((line, i) => <span key={i} className={`connector ${line.side} ${line.vertical ? 'vertical' : ''}`} style={{ left: line.x, top: line.y, width: line.w, height: line.h }}/>) }
               {layout.nodes.map((node, i) => <Match key={i} node={node}/>) }
-              <div className="final-label" style={{ left: layout.final.x, top: layout.final.y - 28, width: layout.final.w }}>GRAND FINAL</div>
-              <div className="final-node" style={{ left: layout.final.x, top: layout.final.y, width: layout.final.w, height: layout.final.h }}>
-                <div className="entrant top"><span>L</span><b>LEFT FINALIST</b><i>—</i></div><div className="vs-line"><em>VS</em></div><div className="entrant bottom"><span>R</span><b>RIGHT FINALIST</b><i>—</i></div>
-              </div>
-              <div className="champion" style={{ left: layout.final.x, top: layout.final.y + layout.final.h + 20, width: layout.final.w }}><small>TOURNAMENT</small><b>CHAMPION</b></div>
+              <div className="final-label" style={{ left: layout.final.x, top: layout.final.y + 5, width: layout.final.w }}>GRAND FINAL</div>
+              <div className="champion" style={{ left: layout.final.x, top: layout.final.y + 25, width: layout.final.w }}><small>TOURNAMENT</small><b>優 勝</b><em>CHAMPION</em></div>
             </div>
           </div>
           <footer><span>PINK DIVISION</span><b>WINNERS ADVANCE ALONG THE CONNECTED PATH</b><span>CYAN DIVISION</span></footer>
