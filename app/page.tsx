@@ -4,6 +4,7 @@ import { ChangeEvent, CSSProperties, PointerEvent as ReactPointerEvent, WheelEve
 import { toPng } from 'html-to-image';
 
 const presets = [4, 8, 16, 32];
+const asset = (name: string) => `${import.meta.env.BASE_URL}${name}`;
 const initialTeams = ['STELLAR PINK', 'NOVA RUSH', 'BLUE IGNITION', 'VOLT CREW', 'LUNAR SPARK', 'BEAT BREAKERS', 'MAGENTA FORCE', 'KNOCK OUT', 'CYBER BLOOM', 'NEON EDGE', 'RAPID BEAT', 'ZERO LIMIT', 'AQUA DRIVE', 'SONIC WAVE', 'FROST BYTE', 'REV UNIT'];
 const BOARD_W = 1120;
 const WIDE_BOARD_W = 1320;
@@ -15,22 +16,22 @@ const titleFonts: Record<string, string> = {
   brush: '"Road Rage", Impact, "Yu Gothic", sans-serif',
 };
 const defaultBackgrounds = [
-  { id: 'kanon-rev', name: 'SIDE DUEL', src: '/kanon-rev-bg.png' },
-  { id: 'kanon-rev-center', name: 'CENTER DUEL', src: '/kanon-rev-center-bg.png' },
+  { id: 'kanon-rev', name: 'SIDE DUEL', src: asset('kanon-rev-bg.png') },
+  { id: 'kanon-rev-center', name: 'CENTER DUEL', src: asset('kanon-rev-center-bg.png') },
 ];
 const defaultWinnerImages = [
-  { id: 'brush', name: 'GOLD BRUSH', src: '/winner-brush-gold.png' },
-  { id: 'blade', name: 'GOLD BLADE', src: '/winner-brush-gold-blade.png' },
-  { id: 'rainbow', name: 'RAINBOW', src: '/winner-rainbow.png' },
-  { id: 'neon-chrome', name: 'NEON CHROME', src: '/winner-neon-chrome.png' },
+  { id: 'brush', name: 'GOLD BRUSH', src: asset('winner-brush-gold.png') },
+  { id: 'blade', name: 'GOLD BLADE', src: asset('winner-brush-gold-blade.png') },
+  { id: 'rainbow', name: 'RAINBOW', src: asset('winner-rainbow.png') },
+  { id: 'neon-chrome', name: 'NEON CHROME', src: asset('winner-neon-chrome.png') },
 ];
 const defaultPlateImages = [
-  { id: 'dogtag', name: 'DOG TAG', src: '/dogtag-plate.png' },
-  { id: 'neon', name: 'NEON CHROME', src: '/plate-neon-chrome.png' },
-  { id: 'carbon', name: 'CARBON RED', src: '/plate-carbon-red.png' },
-  { id: 'gold', name: 'BLACK GOLD', src: '/plate-black-gold.png' },
+  { id: 'dogtag', name: 'DOG TAG', src: asset('dogtag-plate.png') },
+  { id: 'neon', name: 'NEON CHROME', src: asset('plate-neon-chrome.png') },
+  { id: 'carbon', name: 'CARBON RED', src: asset('plate-carbon-red.png') },
+  { id: 'gold', name: 'BLACK GOLD', src: asset('plate-black-gold.png') },
 ];
-const DEFAULT_PLATE_IMAGE = '/plate-neon-chrome.png';
+const DEFAULT_PLATE_IMAGE = asset('plate-neon-chrome.png');
 const DEFAULT_BRACKET_TRANSFORM: Transform = { x: 0, y: 0, scale: 100 };
 const DEFAULT_WINNER_TRANSFORM: Transform = { x: 0, y: 0, scale: 100 };
 const makeTransformMap = (value: Transform) => Object.fromEntries(presets.map(size => [size, { ...value }])) as Record<number, Transform>;
@@ -136,8 +137,8 @@ export default function Home() {
   const [titleImage, setTitleImage] = useState<string | null>(null);
   const [teams, setTeams] = useState(initialTeams);
   const [roundNames, setRoundNames] = useState<Record<string, string>>({});
-  const [background, setBackground] = useState('/kanon-rev-bg.png');
-  const [winnerImage, setWinnerImage] = useState('/winner-brush-gold.png');
+  const [background, setBackground] = useState(asset('kanon-rev-bg.png'));
+  const [winnerImage, setWinnerImage] = useState(asset('winner-brush-gold.png'));
   const [plateImage, setPlateImage] = useState(DEFAULT_PLATE_IMAGE);
   const [bracketTransforms, setBracketTransforms] = useState(() => ({ ...DEFAULT_BRACKET_TRANSFORMS }));
   const [winnerTransforms, setWinnerTransforms] = useState(() => ({ ...DEFAULT_WINNER_TRANSFORMS }));
@@ -228,7 +229,7 @@ export default function Home() {
       <label>参加チーム数</label>
       <div className="presets">{presets.map(n => <button key={n} className={teams.length === n ? 'active' : ''} onClick={() => updateCount(n)}><b>{n}</b><small>TEAMS</small></button>)}</div>
       <p className="section-label">BACKGROUND PRESETS</p>
-      <div className="background-presets">{[...defaultBackgrounds, ...customBackgrounds].map(item => <div key={item.id} className={background === item.src ? 'active' : ''}><button className="preset-image" onClick={() => setBackground(item.src)} style={{ backgroundImage: `url(${item.src})` }} aria-label={`${item.name}を使用`}/><span>{item.name}</span>{!defaultBackgrounds.some(p => p.id === item.id) && <button className="preset-delete" onClick={() => { setCustomBackgrounds(items => items.filter(p => p.id !== item.id)); if (background === item.src) setBackground('/kanon-rev-bg.png'); }} aria-label={`${item.name}を削除`}>×</button>}</div>)}</div>
+      <div className="background-presets">{[...defaultBackgrounds, ...customBackgrounds].map(item => <div key={item.id} className={background === item.src ? 'active' : ''}><button className="preset-image" onClick={() => setBackground(item.src)} style={{ backgroundImage: `url(${item.src})` }} aria-label={`${item.name}を使用`}/><span>{item.name}</span>{!defaultBackgrounds.some(p => p.id === item.id) && <button className="preset-delete" onClick={() => { setCustomBackgrounds(items => items.filter(p => p.id !== item.id)); if (background === item.src) setBackground(asset('kanon-rev-bg.png')); }} aria-label={`${item.name}を削除`}>×</button>}</div>)}</div>
       <label className="upload"><input type="file" accept="image/*" onChange={uploadBackground}/><b>背景を追加・保存</b><span>PNG / JPG</span></label>
       <p className="section-label">BLOCK PRESETS</p>
       <div className="plate-presets">{defaultPlateImages.map(item => <button key={item.id} className={plateImage === item.src ? 'active' : ''} onClick={() => setPlateImage(item.src)}><img src={item.src} alt=""/><span>{item.name}</span></button>)}</div>
@@ -237,7 +238,7 @@ export default function Home() {
       <div className="winner-presets">{defaultWinnerImages.map(item => <button key={item.id} className={winnerImage === item.src ? 'active' : ''} onClick={() => setWinnerImage(item.src)}><img src={item.src} alt=""/><span>{item.name}</span></button>)}</div>
       <label className="upload"><input type="file" accept="image/*" onChange={uploadAsset(setWinnerImage)}/><b>WINNER画像を変更</b><span>透過PNG推奨</span></label>
       <button className="save-default" onClick={() => { setDefaultBracketTransforms(values => ({ ...values, [layout.size]: { ...bracketTransform } })); setDefaultWinnerTransforms(values => ({ ...values, [layout.size]: { ...winnerTransform } })); setSaveStatus(`${layout.size}チームの標準位置を保存`); }}>現在位置をこのチーム数のデフォルトにする</button>
-      <button className="reset" onClick={() => { setBracketTransform(defaultBracketTransform); setWinnerTransform(defaultWinnerTransform); setPlateImage(DEFAULT_PLATE_IMAGE); setWinnerImage('/winner-brush-gold.png'); }}>現在のチーム数の配置と素材をリセット</button>
+      <button className="reset" onClick={() => { setBracketTransform(defaultBracketTransform); setWinnerTransform(defaultWinnerTransform); setPlateImage(DEFAULT_PLATE_IMAGE); setWinnerImage(asset('winner-brush-gold.png')); }}>現在のチーム数の配置と素材をリセット</button>
       <p className="direct-edit-hint">チーム名はトーナメント上のブロックをクリックして直接変更できます。</p>
       <button className="download" onClick={downloadTournamentImage} disabled={exporting}><span>{exporting ? 'CREATING IMAGE…' : 'DOWNLOAD PNG'}</span><b>{exporting ? 'しばらくお待ちください' : '完成画像をPCに保存'}</b></button>
       <button className="print" onClick={() => window.print()}><span>PRINT / PDF</span><b>A4 横向きで出力</b></button>
